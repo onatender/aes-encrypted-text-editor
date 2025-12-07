@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.spec
+
+# Build artifacts
+build/
+dist/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE settings
+.vscode/
+.idea/
+
+# User Data
+*.aetxt
