@@ -320,6 +320,8 @@ class PasswordDialog(QDialog):
         btn_layout = QHBoxLayout()
         self.ok_btn = QPushButton("OK")
         self.ok_btn.clicked.connect(self.accept_password)
+        self.ok_btn.setDefault(True) # Make OK the default button
+        self.input.returnPressed.connect(self.accept_password) # Allow Enter key to submit
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setObjectName("cancel_btn")
         self.cancel_btn.clicked.connect(self.reject)
@@ -598,8 +600,15 @@ class ModernNotepad(QMainWindow):
         self.hide_action.setText("Hide")
 
     def save_file(self):
-        if self.current_file and self.current_password:
-            self._write_file(self.current_file, self.current_password)
+        if self.current_file:
+            if self.current_password:
+                self._write_file(self.current_file, self.current_password)
+            else:
+                # File is open/named but has no password (e.g. was empty)
+                dialog = PasswordDialog(self, "Set Password", is_save=True)
+                if dialog.exec() == QDialog.DialogCode.Accepted:
+                    self.current_password = dialog.password
+                    self._write_file(self.current_file, self.current_password)
         else:
             self.save_as_file()
 
